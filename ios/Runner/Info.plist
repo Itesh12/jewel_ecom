@@ -23,6 +23,8 @@
 				<true/>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
 				<key>NSTemporaryExceptionRequiresForwardSecrecy</key>
 				<false/>
 				<key>NSTemporaryExceptionMinimumTLSVersion</key>
