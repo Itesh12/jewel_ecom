@@ -1,16 +1,18 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:retry/retry.dart';
+
 import '../../config/environment.dart';
+import '../../services/connectivity_service.dart';
+import '../../services/device_info_service.dart';
+import '../../services/navigation_service.dart';
+import '../../services/package_info_service.dart';
 import '../errors/api_exceptions.dart';
 import '../services/storage_service.dart';
-import '../../services/navigation_service.dart';
-import '../../services/device_info_service.dart';
-import '../../services/package_info_service.dart';
-import '../../services/connectivity_service.dart';
 
 class ApiClient extends GetxService {
   late Dio _dio;
@@ -31,25 +33,23 @@ class ApiClient extends GetxService {
         baseUrl: config.apiBaseUrl,
         connectTimeout: Duration(milliseconds: config.connectTimeout),
         receiveTimeout: Duration(milliseconds: config.receiveTimeout),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Connection': 'keep-alive', // 👈 add this
+          'Accept': '*/*', // 👈 add this
+        },
       ),
     );
     _dio.interceptors.addAll([
       // _EnterpriseInterceptor(),
       _AuthInterceptor(_storageService, _navService),
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-      ),
+      LogInterceptor(requestBody: true, responseBody: true, requestHeader: true, responseHeader: true),
     ]);
 
     // Ignore SSL errors for development
     (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
       final client = HttpClient();
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
@@ -87,25 +87,16 @@ class ApiClient extends GetxService {
     await _preCallCheck();
     final dynamicHeaders = await _getHeaders();
     final requestOptions = options ?? Options();
-    requestOptions.headers = {
-      ...requestOptions.headers ?? {},
-      ...dynamicHeaders,
-    };
+    requestOptions.headers = {...requestOptions.headers ?? {}, ...dynamicHeaders};
 
     const r = RetryOptions(maxAttempts: 3);
     return r.retry(
       () => _dio
-          .get(
-            path,
-            queryParameters: queryParameters,
-            options: requestOptions,
-            cancelToken: cancelToken,
-          )
+          .get(path, queryParameters: queryParameters, options: requestOptions, cancelToken: cancelToken)
           .catchError((e) => throw _handleError(e)),
       retryIf: (e) =>
           e is DioException &&
-          (e.type == DioExceptionType.connectionTimeout ||
-              e.type == DioExceptionType.receiveTimeout),
+          (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout),
     );
   }
 
@@ -119,10 +110,7 @@ class ApiClient extends GetxService {
     await _preCallCheck();
     final dynamicHeaders = await _getHeaders();
     final requestOptions = options ?? Options();
-    requestOptions.headers = {
-      ...requestOptions.headers ?? {},
-      ...dynamicHeaders,
-    };
+    requestOptions.headers = {...requestOptions.headers ?? {}, ...dynamicHeaders};
 
     // If data is FormData, let Dio handle Content-Type (remove it if set to json)
     if (data is FormData) {
@@ -132,18 +120,11 @@ class ApiClient extends GetxService {
     const r = RetryOptions(maxAttempts: 3);
     return r.retry(
       () => _dio
-          .post(
-            path,
-            data: data,
-            queryParameters: queryParameters,
-            options: requestOptions,
-            cancelToken: cancelToken,
-          )
+          .post(path, data: data, queryParameters: queryParameters, options: requestOptions, cancelToken: cancelToken)
           .catchError((e) => throw _handleError(e)),
       retryIf: (e) =>
           e is DioException &&
-          (e.type == DioExceptionType.connectionTimeout ||
-              e.type == DioExceptionType.receiveTimeout),
+          (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout),
     );
   }
 
@@ -157,10 +138,7 @@ class ApiClient extends GetxService {
     await _preCallCheck();
     final dynamicHeaders = await _getHeaders();
     final requestOptions = options ?? Options();
-    requestOptions.headers = {
-      ...requestOptions.headers ?? {},
-      ...dynamicHeaders,
-    };
+    requestOptions.headers = {...requestOptions.headers ?? {}, ...dynamicHeaders};
 
     // If data is FormData, let Dio handle Content-Type
     if (data is FormData) {
@@ -170,18 +148,11 @@ class ApiClient extends GetxService {
     const r = RetryOptions(maxAttempts: 3);
     return r.retry(
       () => _dio
-          .put(
-            path,
-            data: data,
-            queryParameters: queryParameters,
-            options: requestOptions,
-            cancelToken: cancelToken,
-          )
+          .put(path, data: data, queryParameters: queryParameters, options: requestOptions, cancelToken: cancelToken)
           .catchError((e) => throw _handleError(e)),
       retryIf: (e) =>
           e is DioException &&
-          (e.type == DioExceptionType.connectionTimeout ||
-              e.type == DioExceptionType.receiveTimeout),
+          (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout),
     );
   }
 
@@ -200,40 +171,22 @@ class ApiClient extends GetxService {
       case DioExceptionType.badResponse:
         switch (e.response?.statusCode) {
           case 400:
-            throw BadRequestException(
-              e.response?.data['message'] ?? 'Bad request',
-              e.requestOptions.path,
-            );
+            throw BadRequestException(e.response?.data['message'] ?? 'Bad request', e.requestOptions.path);
           case 401:
           case 403:
-            throw UnauthorisedException(
-              e.response?.data['message'] ?? 'Unauthorized',
-              e.requestOptions.path,
-            );
+            throw UnauthorisedException(e.response?.data['message'] ?? 'Unauthorized', e.requestOptions.path);
           case 404:
-            throw FetchDataException(
-              'Resource not found',
-              e.requestOptions.path,
-            );
+            throw FetchDataException('Resource not found', e.requestOptions.path);
           case 500:
           default:
-            throw FetchDataException(
-              'Server error: ${e.response?.statusCode}',
-              e.requestOptions.path,
-            );
+            throw FetchDataException('Server error: ${e.response?.statusCode}', e.requestOptions.path);
         }
       case DioExceptionType.cancel:
         throw FetchDataException('Request cancelled', e.requestOptions.path);
       case DioExceptionType.connectionError:
-        throw FetchDataException(
-          'No internet connection',
-          e.requestOptions.path,
-        );
+        throw FetchDataException('No internet connection', e.requestOptions.path);
       default:
-        throw FetchDataException(
-          'Unknown error occurred',
-          e.requestOptions.path,
-        );
+        throw FetchDataException('Unknown error occurred', e.requestOptions.path);
     }
   }
 }

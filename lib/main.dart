@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'app/routes/app_pages.dart';
-import 'core/theme/app_theme.dart';
-import 'app/config/environment.dart';
-import 'app/data/services/storage_service.dart';
-import 'app/services/navigation_service.dart';
 
-import 'app/services/device_info_service.dart';
-import 'app/services/package_info_service.dart';
-import 'app/services/connectivity_service.dart';
+import 'app/config/environment.dart';
 import 'app/controllers/network_manager.dart';
+import 'app/data/services/storage_service.dart';
+import 'app/routes/app_pages.dart';
+import 'app/services/connectivity_service.dart';
+import 'app/services/device_info_service.dart';
+import 'app/services/navigation_service.dart';
+import 'app/services/package_info_service.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
