@@ -28,6 +28,7 @@ class AppPages {
       name: _Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.SPLASH,
@@ -38,26 +39,33 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: _Paths.REGISTER,
       page: () => const RegisterView(),
       binding: RegisterBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: _Paths.FORGOT_PASSWORD,
       page: () => const ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
+      transition: Transition.cupertino,
     ),
   ];
 }

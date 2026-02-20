@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final IconData? prefixIcon;
+  final Color? prefixIconColor;
   final String? Function(String?)? validator;
 
   const CustomTextField({
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.prefixIcon,
+    this.prefixIconColor,
     this.validator,
   });
 
@@ -28,35 +30,31 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: validator,
-      style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+      style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
         prefixIcon: prefixIcon != null
-            ? Icon(prefixIcon, color: AppColors.primary)
+            ? Icon(prefixIcon, color: prefixIconColor ?? AppColors.primary)
             : null,
-        labelStyle: TextStyle(color: AppColors.textSecondary),
-        hintStyle: TextStyle(
-          color: AppColors.textSecondary.withValues(alpha: 0.5),
-        ),
+        labelStyle: const TextStyle(color: Colors.white60, fontSize: 14),
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
         filled: true,
-        fillColor: Theme.of(context).cardColor,
+        fillColor: const Color(0xFF1F1F1F), // Dark surface for luxury feel
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
-            color: AppColors.textSecondary.withValues(alpha: 0.2),
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.error),
         ),
       ),

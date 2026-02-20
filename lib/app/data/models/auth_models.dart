@@ -85,15 +85,15 @@ class User {
   final int userId;
   final String name;
   final String email;
-  final String mobile;
-  final String role;
+  final String? mobile;
+  final String? role;
 
   User({
     required this.userId,
     required this.name,
     required this.email,
-    required this.mobile,
-    required this.role,
+    this.mobile,
+    this.role,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -101,18 +101,20 @@ class User {
       userId: json['userId'] ?? 0,
       name: json['name'] ?? '',
       email: json['email'] ?? '',
-      mobile: json['mobile'] ?? '',
-      role: json['role'] ?? '',
+      mobile: json['mobile'],
+      role: json['role'],
     );
   }
 }
 
 class EligibilityResponse {
+  final bool isEligible;
   final bool isEmailAvailable;
   final bool isMobileAvailable;
   final String message;
 
   EligibilityResponse({
+    required this.isEligible,
     required this.isEmailAvailable,
     required this.isMobileAvailable,
     required this.message,
@@ -120,6 +122,7 @@ class EligibilityResponse {
 
   factory EligibilityResponse.fromJson(Map<String, dynamic> json) {
     return EligibilityResponse(
+      isEligible: json['isEligible'] ?? false,
       isEmailAvailable: json['isEmailAvailable'] ?? false,
       isMobileAvailable: json['isMobileAvailable'] ?? false,
       message: json['message'] ?? '',

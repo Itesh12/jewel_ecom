@@ -6,7 +6,7 @@ abstract class BaseConfig {
 
 class DevConfig implements BaseConfig {
   @override
-  String get apiBaseUrl => 'https://217.217.249.94:8008/';
+  String get apiBaseUrl => 'http://217.217.249.94/';
 
   @override
   int get connectTimeout => 30000;

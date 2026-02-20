@@ -13,8 +13,8 @@ class SplashController extends GetxController {
   }
 
   Future<void> _navigateToNextScreen() async {
-    // Wait for animation duration (1.5s) + buffer
-    await Future.delayed(const Duration(seconds: 2));
+    // Wait for progress bar animation (2s) + brief visibility buffer
+    await Future.delayed(const Duration(milliseconds: 2500));
 
     final token = _storageService.getToken();
     if (token != null && token.isNotEmpty) {

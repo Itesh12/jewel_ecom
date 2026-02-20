@@ -25,7 +25,7 @@ class RegisterController extends GetxController {
   }
 
   Future<void> register() async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState?.validate() ?? false) {
       isLoading.value = true;
       try {
         // Step 1: Check Eligibility
@@ -34,7 +34,7 @@ class RegisterController extends GetxController {
           mobileController.text.trim(),
         );
 
-        if (eligibility.isEmailAvailable && eligibility.isMobileAvailable) {
+        if (eligibility.isEligible) {
           // Step 2: Register
           await _authRepository.register(
             nameController.text.trim(),

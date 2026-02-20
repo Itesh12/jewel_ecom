@@ -21,7 +21,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState?.validate() ?? false) {
       isLoading.value = true;
       try {
         await _authRepository.login(

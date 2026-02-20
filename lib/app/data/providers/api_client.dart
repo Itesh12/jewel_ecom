@@ -35,7 +35,7 @@ class ApiClient extends GetxService {
       ),
     );
     _dio.interceptors.addAll([
-      _EnterpriseInterceptor(),
+      // _EnterpriseInterceptor(),
       _AuthInterceptor(_storageService, _navService),
       LogInterceptor(
         requestBody: true,
@@ -59,11 +59,11 @@ class ApiClient extends GetxService {
     final headers = <String, String>{
       'Accept-Language': '*',
       'Connection': 'Keep-Alive',
-      'appType': 'JEWEL_ECOM_APP',
-      'requestFrom': 'MOBILE',
-      'packageInfo': _packageInfo.packageInfoData,
-      'deviceInfo': _deviceInfo.deviceData.toString(),
-      // 'devicetoken': await AppMessaging().getToken(), // TODO: Add FCM
+      // Headers stripped to match ReqBin/Postman
+      // 'appType': 'JEWEL_ECOM_APP',
+      // 'requestFrom': 'MOBILE',
+      // 'packageInfo': _packageInfo.packageInfoData,
+      // 'deviceInfo': _deviceInfo.deviceData.toString(),
     };
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
