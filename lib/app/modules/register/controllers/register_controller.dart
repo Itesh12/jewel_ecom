@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../services/navigation_service.dart';
 import '../../../data/errors/api_exceptions.dart';
+import '../../../services/alert_service.dart';
 
 class RegisterController extends GetxController {
   final nameController = TextEditingController();
@@ -13,7 +14,7 @@ class RegisterController extends GetxController {
 
   final _authRepository = Get.find<AuthRepository>();
   final _navService = Get.find<NavigationService>();
-  final isLoading = false.obs;
+  final _alertService = Get.find<AlertService>();
 
   @override
   void onClose() {
@@ -26,7 +27,6 @@ class RegisterController extends GetxController {
 
   Future<void> register() async {
     if (formKey.currentState?.validate() ?? false) {
-      isLoading.value = true;
       try {
         // Step 1: Check Eligibility
         final eligibility = await _authRepository.checkEligibility(
@@ -42,15 +42,15 @@ class RegisterController extends GetxController {
             mobileController.text.trim(),
             passwordController.text.trim(),
           );
+          // _navService.toVerifyOtp(email: emailController.text.trim());
           _navService.toDashboard();
+          _alertService.success('Account created successfully!');
         } else {
-          Get.snackbar('Error', eligibility.message);
+          _alertService.error(eligibility.message);
         }
       } catch (e) {
         final message = e is AppException ? e.message : e.toString();
-        Get.snackbar('Error', message ?? 'An unexpected error occurred');
-      } finally {
-        isLoading.value = false;
+        _alertService.error(message ?? 'An unexpected error occurred');
       }
     }
   }

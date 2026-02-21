@@ -8,9 +8,8 @@ import 'package:retry/retry.dart';
 
 import '../../config/environment.dart';
 import '../../services/connectivity_service.dart';
-import '../../services/device_info_service.dart';
+import '../../services/loading_service.dart';
 import '../../services/navigation_service.dart';
-import '../../services/package_info_service.dart';
 import '../errors/api_exceptions.dart';
 import '../services/storage_service.dart';
 
@@ -18,8 +17,7 @@ class ApiClient extends GetxService {
   late Dio _dio;
   final StorageService _storageService = Get.find<StorageService>();
   final NavigationService _navService = Get.find<NavigationService>();
-  final DeviceInfoService _deviceInfo = Get.find<DeviceInfoService>();
-  final PackageInfoService _packageInfo = Get.find<PackageInfoService>();
+  final LoadingService _loadingService = Get.find<LoadingService>();
   final ConnectivityService _connectivity = Get.find<ConnectivityService>();
 
   // Singleton instance
@@ -43,6 +41,7 @@ class ApiClient extends GetxService {
       ),
     );
     _dio.interceptors.addAll([
+      _LoadingInterceptor(_loadingService),
       _EnterpriseInterceptor(),
       _AuthInterceptor(_storageService, _navService),
       LogInterceptor(
@@ -283,6 +282,30 @@ class _AuthInterceptor extends Interceptor {
       _storageService.clearAuth();
       _navService.toLogin();
     }
+    super.onError(err, handler);
+  }
+}
+
+class _LoadingInterceptor extends Interceptor {
+  final LoadingService _loadingService;
+
+  _LoadingInterceptor(this._loadingService);
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    _loadingService.show();
+    super.onRequest(options, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    _loadingService.hide();
+    super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    _loadingService.hide();
     super.onError(err, handler);
   }
 }

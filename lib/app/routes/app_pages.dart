@@ -14,6 +14,8 @@ import '../modules/forgot_password/bindings/forgot_password_binding.dart';
 import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
+import '../modules/otp/bindings/otp_binding.dart';
+import '../modules/otp/views/otp_view.dart';
 
 part 'app_routes.dart';
 
@@ -59,6 +61,12 @@ class AppPages {
       name: _Paths.FORGOT_PASSWORD,
       page: () => const ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.VERIFY_OTP,
+      page: () => const OtpView(),
+      binding: OtpBinding(),
       transition: Transition.fadeIn,
     ),
     GetPage(

@@ -42,6 +42,17 @@ class AuthRepository {
     return authResponse;
   }
 
+  Future<AuthResponse> verifyOtp(String email, String otp) async {
+    final request = VerifyOtpRequest(email: email, otp: otp);
+    final response = await _apiClient.post(
+      ApiEndpoints.verifyOtp,
+      data: request.toJson(),
+    );
+    final authResponse = AuthResponse.fromJson(response.data);
+    await _saveAuthSession(authResponse);
+    return authResponse;
+  }
+
   Future<AuthResponse> login(String email, String password) async {
     final request = LoginRequest(email: email, password: password);
     final response = await _apiClient.post(
@@ -53,18 +64,33 @@ class AuthRepository {
     return authResponse;
   }
 
+  Future<void> logout() async {
+    final refreshToken = _storageService.getRefreshToken();
+    if (refreshToken != null) {
+      await _apiClient.post(
+        ApiEndpoints.authLogout,
+        data: {'refreshToken': refreshToken},
+      );
+    }
+    _storageService.clearAuth();
+  }
+
   Future<void> _saveAuthSession(AuthResponse response) async {
     if (response.token.isNotEmpty) {
       await _storageService.setToken(response.token);
     }
-    if (response.refreshToken != null) {
-      await _storageService.setRefreshToken(response.refreshToken!);
+
+    final refreshToken = response.refreshToken;
+    if (refreshToken != null) {
+      await _storageService.setRefreshToken(refreshToken);
     }
-    if (response.user != null) {
+
+    final user = response.user;
+    if (user != null) {
       await _storageService.setUserDetails(
-        id: response.user!.userId,
-        name: response.user!.name,
-        email: response.user!.email,
+        id: user.userId,
+        name: user.name,
+        email: user.email,
       );
     }
   }

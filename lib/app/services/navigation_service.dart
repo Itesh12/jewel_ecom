@@ -3,9 +3,15 @@ import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 
 class NavigationService extends GetxService {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   Future<NavigationService> init() async {
     return this;
   }
+
+  /// Safely get the current context from the navigator key.
+  /// This is preferred over Get.context! for production-grade null safety.
+  BuildContext? get context => navigatorKey.currentContext;
 
   // Generic Navigation Method
   Future<T?>? toNamed<T>(String route, {dynamic arguments}) {
@@ -34,6 +40,8 @@ class NavigationService extends GetxService {
   void toLogin() => offAllNamed(Routes.LOGIN);
   void toRegister() => toNamed(Routes.REGISTER);
   void toForgotPassword() => toNamed(Routes.FORGOT_PASSWORD);
+  void toVerifyOtp({required String email}) =>
+      toNamed(Routes.VERIFY_OTP, arguments: email);
   void toDashboard() => offAllNamed(Routes.DASHBOARD);
   void toHome() => offAllNamed(Routes.HOME);
   void toOnboarding() => offAllNamed(Routes.ONBOARDING);

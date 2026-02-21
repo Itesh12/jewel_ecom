@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../services/navigation_service.dart';
 import '../../../data/errors/api_exceptions.dart';
+import '../../../services/alert_service.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -11,7 +12,7 @@ class LoginController extends GetxController {
 
   final _authRepository = Get.find<AuthRepository>();
   final _navService = Get.find<NavigationService>();
-  final isLoading = false.obs;
+  final _alertService = Get.find<AlertService>();
 
   @override
   void onClose() {
@@ -22,7 +23,6 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     if (formKey.currentState?.validate() ?? false) {
-      isLoading.value = true;
       try {
         await _authRepository.login(
           emailController.text.trim(),
@@ -31,9 +31,7 @@ class LoginController extends GetxController {
         _navService.toDashboard();
       } catch (e) {
         final message = e is AppException ? e.message : e.toString();
-        Get.snackbar('Error', message ?? 'An unexpected error occurred');
-      } finally {
-        isLoading.value = false;
+        _alertService.error(message ?? 'An unexpected error occurred');
       }
     }
   }

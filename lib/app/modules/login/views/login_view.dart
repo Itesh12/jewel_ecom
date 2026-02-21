@@ -68,10 +68,12 @@ class LoginView extends GetView<LoginController> {
                                 prefixIcon: Icons.email_outlined,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter email';
-                                  if (!GetUtils.isEmail(value))
+                                  }
+                                  if (!GetUtils.isEmail(value)) {
                                     return 'Invalid email';
+                                  }
                                   return null;
                                 },
                               ),
@@ -87,8 +89,9 @@ class LoginView extends GetView<LoginController> {
                                 prefixIcon: Icons.lock_outline,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter password';
+                                  }
                                   return null;
                                 },
                               ),
@@ -149,15 +152,11 @@ class LoginView extends GetView<LoginController> {
                             // Login Button
                             AuthStaggeredFadeIn(
                               delayMs: 0,
-                              child: Obx(
-                                () => CustomButton(
-                                  text: controller.isLoading.value
-                                      ? "LOGGING IN..."
-                                      : "Login",
-                                  onPressed: controller.login,
-                                  backgroundColor: AppColors.primary,
-                                  borderRadius: 16,
-                                ),
+                              child: CustomButton(
+                                text: "Login",
+                                onPressed: controller.login,
+                                backgroundColor: AppColors.primary,
+                                borderRadius: 16,
                               ),
                             ),
 
@@ -170,12 +169,6 @@ class LoginView extends GetView<LoginController> {
                 ),
               ],
             ),
-          ),
-
-          Obx(
-            () => controller.isLoading.value
-                ? const Positioned.fill(child: AuthLoadingOverlay())
-                : const SizedBox.shrink(),
           ),
         ],
       ),

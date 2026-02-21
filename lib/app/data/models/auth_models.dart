@@ -129,3 +129,21 @@ class EligibilityResponse {
     );
   }
 }
+
+class VerifyOtpRequest {
+  final String enterpriseCode;
+  final String email;
+  final String otp;
+
+  VerifyOtpRequest({
+    this.enterpriseCode = 'KBABU',
+    required this.email,
+    required this.otp,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'enterpriseCode': enterpriseCode,
+    'email': email,
+    'otp': otp,
+  };
+}

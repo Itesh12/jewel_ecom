@@ -1,0 +1,23 @@
+Analyzing jewel_ecom...                                         
+
+warning • Unused import: '../../services/device_info_service.dart' • lib/app/data/providers/api_client.dart:11:8 • unused_import
+warning • Unused import: '../../services/package_info_service.dart' • lib/app/data/providers/api_client.dart:13:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/global_widgets/custom_text_field.dart:41:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/global_widgets/custom_text_field.dart:50:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/forgot_password/controllers/forgot_password_controller.dart:26:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/login/views/auth_common_widgets.dart:220:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:85:45 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:88:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:144:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:261:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:268:45 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:335:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:345:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/onboarding/views/onboarding_view.dart:353:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/otp/views/otp_view.dart:67:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/otp/views/otp_view.dart:170:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/otp/views/otp_view.dart:216:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/splash/views/splash_view.dart:87:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/app/modules/splash/views/splash_view.dart:170:50 • deprecated_member_use
+
+19 issues found. (ran in 13.0s)

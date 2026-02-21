@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../services/alert_service.dart';
 
 class ForgotPasswordController extends GetxController {
   final emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final isLoading = false.obs;
+  final _alertService = Get.find<AlertService>();
 
   @override
   void onClose() {
@@ -14,18 +15,10 @@ class ForgotPasswordController extends GetxController {
 
   Future<void> resetPassword() async {
     if (formKey.currentState?.validate() ?? false) {
-      isLoading.value = true;
-      // Simulate network delay for premium feel
-      await Future.delayed(const Duration(seconds: 2));
-      isLoading.value = false;
+      // simulate delay for premium feel, though real API will do this eventually
+      await Future.delayed(const Duration(seconds: 1));
 
-      Get.snackbar(
-        'Success',
-        'Password reset link sent to your email',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.white,
-      );
+      _alertService.success('Password reset link sent to your email');
       Get.back();
     }
   }

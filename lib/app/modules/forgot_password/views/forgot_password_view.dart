@@ -89,11 +89,6 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
               ],
             ),
           ),
-          Obx(
-            () => controller.isLoading.value
-                ? const Positioned.fill(child: AuthLoadingOverlay())
-                : const SizedBox.shrink(),
-          ),
         ],
       ),
     );

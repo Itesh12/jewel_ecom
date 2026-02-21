@@ -9,6 +9,16 @@ class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Jewel E-com'),
+        actions: [
+          IconButton(
+            onPressed: controller.logout,
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+          ),
+        ],
+      ),
       body: Center(
         child: Text(
           'Dashboard View is working',

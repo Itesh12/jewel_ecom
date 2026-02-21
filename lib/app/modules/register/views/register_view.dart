@@ -65,8 +65,9 @@ class RegisterView extends GetView<RegisterController> {
                                 prefixIcon: Icons.person_outline,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter your name';
+                                  }
                                   return null;
                                 },
                               ),
@@ -82,8 +83,9 @@ class RegisterView extends GetView<RegisterController> {
                                 prefixIcon: Icons.phone_android,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter mobile';
+                                  }
                                   return null;
                                 },
                               ),
@@ -99,10 +101,12 @@ class RegisterView extends GetView<RegisterController> {
                                 prefixIcon: Icons.email_outlined,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter email';
-                                  if (!GetUtils.isEmail(value))
+                                  }
+                                  if (!GetUtils.isEmail(value)) {
                                     return 'Invalid email';
+                                  }
                                   return null;
                                 },
                               ),
@@ -118,10 +122,12 @@ class RegisterView extends GetView<RegisterController> {
                                 prefixIcon: Icons.lock_outline,
                                 prefixIconColor: AppColors.primary,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty)
+                                  if (value == null || value.isEmpty) {
                                     return 'Please enter password';
-                                  if (value.length < 6)
+                                  }
+                                  if (value.length < 6) {
                                     return 'Password too short';
+                                  }
                                   return null;
                                 },
                               ),
@@ -130,15 +136,11 @@ class RegisterView extends GetView<RegisterController> {
 
                             AuthStaggeredFadeIn(
                               delayMs: 0,
-                              child: Obx(
-                                () => CustomButton(
-                                  text: controller.isLoading.value
-                                      ? "CREATING..."
-                                      : "Register",
-                                  onPressed: controller.register,
-                                  backgroundColor: AppColors.primary,
-                                  borderRadius: 16,
-                                ),
+                              child: CustomButton(
+                                text: "Register",
+                                onPressed: controller.register,
+                                backgroundColor: AppColors.primary,
+                                borderRadius: 16,
                               ),
                             ),
                             const SizedBox(height: 50),
@@ -150,12 +152,6 @@ class RegisterView extends GetView<RegisterController> {
                 ),
               ],
             ),
-          ),
-
-          Obx(
-            () => controller.isLoading.value
-                ? const Positioned.fill(child: AuthLoadingOverlay())
-                : const SizedBox.shrink(),
           ),
         ],
       ),
