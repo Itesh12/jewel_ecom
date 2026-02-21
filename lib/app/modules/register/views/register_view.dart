@@ -11,8 +11,9 @@ class RegisterView extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -33,12 +34,21 @@ class RegisterView extends GetView<RegisterController> {
                 // Bottom Card Container
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF121212), // Premium deep black card
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF121212) : Colors.white,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(32),
                         topRight: Radius.circular(32),
                       ),
+                      boxShadow: isDark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 20,
+                                offset: const Offset(0, -5),
+                              ),
+                            ],
                     ),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(

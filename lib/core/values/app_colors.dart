@@ -8,12 +8,12 @@ abstract class AppColors {
 
   // Secondary Palette
   static const secondary = Color(0xFF1A1A1A); // Deep Navy/Black
-  static const background = Color(0xFFF9F9F9); // Soft White/Cream
+  static const background = Color(0xFFFCF9F2); // Pearl/Cream Ivory
   static const surface = Colors.white;
 
   // Text Colors
-  static const textPrimary = Color(0xFF1A1A1A);
-  static const textSecondary = Color(0xFF757575);
+  static const textPrimary = Color(0xFF1C1917); // Stone Black
+  static const textSecondary = Color(0xFF78716C); // Warm Gray/Stone
 
   // Success/Error
   static const success = Color(0xFF4CAF50);

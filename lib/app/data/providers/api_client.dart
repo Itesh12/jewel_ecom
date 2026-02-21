@@ -30,7 +30,7 @@ class ApiClient extends GetxService {
       BaseOptions(
         baseUrl: config.apiBaseUrl,
         followRedirects: true,
-        validateStatus: (status) => status != null && status < 500,
+        validateStatus: (status) => status != null && status < 400,
         connectTimeout: Duration(milliseconds: config.connectTimeout),
         receiveTimeout: Duration(milliseconds: config.receiveTimeout),
         headers: {

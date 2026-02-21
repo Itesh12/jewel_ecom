@@ -10,12 +10,13 @@ class OnboardingView extends GetView<OnboardingController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Background with Rich Deep Glows
-          const Positioned.fill(child: _OnboardingBackground()),
+          Positioned.fill(child: _OnboardingBackground(isDark: isDark)),
 
           // Professional Layout
           SafeArea(
@@ -43,9 +44,12 @@ class OnboardingView extends GetView<OnboardingController> {
                               vertical: 8,
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             "SKIP",
                             style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withOpacity(0.7),
                               fontSize: 13,
                               letterSpacing: 2.0,
                               fontWeight: FontWeight.w500,
@@ -82,10 +86,14 @@ class OnboardingView extends GetView<OnboardingController> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(32),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.03),
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.03)
+                            : Colors.black.withValues(alpha: 0.02),
                         border: Border(
                           top: BorderSide(
-                            color: Colors.white.withOpacity(0.1),
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.1)
+                                : Colors.black.withValues(alpha: 0.05),
                             width: 0.5,
                           ),
                         ),
@@ -98,7 +106,7 @@ class OnboardingView extends GetView<OnboardingController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(
                               controller.slides.length,
-                              (index) => _buildIndicator(index),
+                              (index) => _buildIndicator(context, index),
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -127,8 +135,9 @@ class OnboardingView extends GetView<OnboardingController> {
     );
   }
 
-  Widget _buildIndicator(int index) {
+  Widget _buildIndicator(BuildContext context, int index) {
     return Obx(() {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
       bool isActive = controller.currentPage.value == index;
       return AnimatedContainer(
         duration: const Duration(milliseconds: 350),
@@ -136,12 +145,14 @@ class OnboardingView extends GetView<OnboardingController> {
         height: 2,
         width: isActive ? 32 : 12,
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primary : Colors.white24,
+          color: isActive
+              ? AppColors.primary
+              : (isDark ? Colors.white24 : Colors.black12),
           borderRadius: BorderRadius.circular(1),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.4),
+                    color: AppColors.primary.withValues(alpha: 0.4),
                     blurRadius: 8,
                     spreadRadius: 1,
                   ),
@@ -177,21 +188,23 @@ class _OnboardingSlide extends StatelessWidget {
               children: [
                 _AnimatedText(
                   text: data.title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 34,
                     height: 1.15,
                     fontWeight: FontWeight.w200,
                     letterSpacing: -0.5,
-                    fontFamily: 'serif', // Luxury feel if available
+                    fontFamily: 'Playfair Display',
                   ),
                   delayMs: 100,
                 ),
                 const SizedBox(height: 24),
                 _AnimatedText(
                   text: data.subtitle,
-                  style: const TextStyle(
-                    color: Colors.white60,
+                  style: TextStyle(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
                     fontSize: 15,
                     height: 1.8,
                     fontWeight: FontWeight.w300,
@@ -278,6 +291,12 @@ class _FloatingVisualAssetState extends State<_FloatingVisualAsset>
                           : Icons.verified_user_rounded,
                       size: 130,
                       color: AppColors.primary,
+                      shadows: [
+                        Shadow(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -319,30 +338,35 @@ class _AnimatedText extends StatelessWidget {
 }
 
 class _OnboardingBackground extends StatelessWidget {
-  const _OnboardingBackground();
+  final bool isDark;
+  const _OnboardingBackground({required this.isDark});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(color: AppColors.backgroundDark),
+        Container(
+          color: isDark ? AppColors.backgroundDark : AppColors.background,
+        ),
 
         // Deep Gold Glow
         Positioned(
           top: -150,
           left: -100,
           child: _GlowCircle(
-            color: AppColors.primary.withOpacity(0.12),
+            color: AppColors.primary.withValues(alpha: isDark ? 0.12 : 0.08),
             size: 400,
           ),
         ),
 
-        // Subtle Navy Glow
+        // Subtle Glow
         Positioned(
           bottom: 200,
           right: -100,
           child: _GlowCircle(
-            color: const Color(0xFF1E293B).withOpacity(0.3),
+            color: isDark
+                ? const Color(0xFF1E293B).withValues(alpha: 0.3)
+                : AppColors.primary.withValues(alpha: 0.05),
             size: 500,
           ),
         ),
@@ -350,7 +374,7 @@ class _OnboardingBackground extends StatelessWidget {
         // Center Accent
         Center(
           child: _GlowCircle(
-            color: AppColors.primary.withOpacity(0.03),
+            color: AppColors.primary.withValues(alpha: isDark ? 0.03 : 0.01),
             size: 600,
           ),
         ),

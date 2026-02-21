@@ -6,5 +6,8 @@ class ApiEndpoints {
   static const String authLogin = 'api/auth/login';
   static const String authLogout = 'api/auth/logout';
 
+  // Dashboard
+  static const String categoryList = 'api/Category/list';
+
   // Add other endpoints here as needed
 }

@@ -11,8 +11,9 @@ class LoginView extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -33,12 +34,28 @@ class LoginView extends GetView<LoginController> {
                 // Bottom Card Container
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF121212), // Premium deep black card
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(32),
-                        topRight: Radius.circular(32),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF121212) : Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
                       ),
+                      border: isDark
+                          ? Border.all(
+                              color: Colors.white.withValues(alpha: 0.05),
+                            )
+                          : Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                            ),
+                      boxShadow: isDark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 30,
+                                offset: const Offset(0, -10),
+                              ),
+                            ],
                     ),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(
@@ -116,18 +133,25 @@ class LoginView extends GetView<LoginController> {
                                           onChanged: (v) {},
                                           activeColor: AppColors.primary,
                                           checkColor: Colors.black,
-                                          side: const BorderSide(
-                                            color: Colors.white24,
+                                          side: BorderSide(
+                                            color: isDark
+                                                ? Colors.white24
+                                                : AppColors.textSecondary
+                                                      .withValues(alpha: 0.3),
                                             width: 1.5,
                                           ),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      const Text(
+                                      Text(
                                         "Remember me",
                                         style: TextStyle(
-                                          color: Colors.white60,
+                                          color: isDark
+                                              ? Colors.white60
+                                              : AppColors.textPrimary
+                                                    .withValues(alpha: 0.8),
                                           fontSize: 13,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ],

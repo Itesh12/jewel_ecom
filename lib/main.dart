@@ -11,6 +11,8 @@ import 'app/services/device_info_service.dart';
 import 'app/services/navigation_service.dart';
 import 'app/services/package_info_service.dart';
 import 'app/services/loading_service.dart';
+import 'app/data/providers/api_client.dart';
+import 'app/controllers/theme_controller.dart';
 import 'app/global_widgets/loading_overlay.dart';
 import 'core/theme/app_theme.dart';
 
@@ -22,11 +24,14 @@ void main() async {
   await Get.putAsync(() => NavigationService().init());
   await Get.putAsync(() => LoadingService().init());
   await Get.putAsync(() => StorageService().init());
-  await Get.putAsync(() => AlertService().init());
   await Get.putAsync(() => ConnectivityService().init());
+  await Get.putAsync(() => AlertService().init());
   await Get.putAsync(() => DeviceInfoService().init());
   await Get.putAsync(() => PackageInfoService().init());
-  Get.put(NetworkManager()); // Not async, just put
+
+  Get.put(ApiClient());
+  Get.put(NetworkManager());
+  final themeController = Get.put(ThemeController());
 
   runApp(
     GetMaterialApp(
@@ -36,7 +41,7 @@ void main() async {
       getPages: AppPages.routes,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: themeController.themeMode,
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return LoadingOverlay(child: child!);

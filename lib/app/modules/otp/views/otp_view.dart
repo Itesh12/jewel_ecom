@@ -11,8 +11,9 @@ class OtpView extends GetView<OtpController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -30,12 +31,21 @@ class OtpView extends GetView<OtpController> {
                 ),
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF121212), // Premium deep black card
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF121212) : Colors.white,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(32),
                         topRight: Radius.circular(32),
                       ),
+                      boxShadow: isDark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 20,
+                                offset: const Offset(0, -5),
+                              ),
+                            ],
                     ),
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -46,12 +56,12 @@ class OtpView extends GetView<OtpController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const AuthStaggeredFadeIn(
+                          AuthStaggeredFadeIn(
                             delayMs: 0,
                             child: Text(
                               "Verify OTP",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: -0.5,
@@ -64,7 +74,9 @@ class OtpView extends GetView<OtpController> {
                             child: Text(
                               "We've sent a 6-digit verification code to:\n${controller.email}",
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.4),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.5),
                                 fontSize: 14,
                                 height: 1.5,
                               ),
@@ -148,16 +160,21 @@ class _OtpBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 45,
       height: 56,
       decoration: BoxDecoration(
-        color: const Color(0xFF1F1F1F), // Match CustomTextField surface
+        color: isDark
+            ? const Color(0xFF1F1F1F)
+            : AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: focusNode.hasFocus
               ? AppColors.primary
-              : Colors.white.withOpacity(0.05),
+              : (isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : AppColors.textSecondary.withValues(alpha: 0.1)),
           width: focusNode.hasFocus ? 1.5 : 1,
         ),
       ),
@@ -172,8 +189,8 @@ class _OtpBox extends StatelessWidget {
           LengthLimitingTextInputFormatter(1),
           FilteringTextInputFormatter.digitsOnly,
         ],
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 22,
           fontWeight: FontWeight.w600,
         ),
@@ -203,14 +220,21 @@ class _ResendSection extends StatelessWidget {
       children: [
         Text(
           "Didn't receive code?",
-          style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 14),
+          style: TextStyle(
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.5),
+            fontSize: 14,
+          ),
         ),
         const SizedBox(height: 8),
         TextButton(
           onPressed: canResend ? onResend : null,
           style: TextButton.styleFrom(
             foregroundColor: AppColors.primary,
-            disabledForegroundColor: Colors.white10,
+            disabledForegroundColor: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.1),
           ),
           child: Text(
             canResend

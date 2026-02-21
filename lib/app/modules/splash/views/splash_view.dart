@@ -9,21 +9,28 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Stack(
         children: [
           // Premium Radial Gradient Background
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: RadialGradient(
                 center: Alignment.center,
                 radius: 1.2,
-                colors: [
-                  Color(0xFF2C2C2C), // Slightly lighter center
-                  AppColors.backgroundDark, // Original dark navy/black
-                  Color(0xFF000000), // Pure black at edges
-                ],
-                stops: [0.0, 0.6, 1.0],
+                colors: isDark
+                    ? [
+                        const Color(0xFF2C2C2C),
+                        AppColors.backgroundDark,
+                        const Color(0xFF000000),
+                      ]
+                    : [
+                        const Color(0xFFFFFFFF),
+                        AppColors.background,
+                        const Color(0xFFF3F0E9),
+                      ],
+                stops: const [0.0, 0.6, 1.0],
               ),
             ),
           ),
@@ -31,8 +38,8 @@ class SplashView extends GetView<SplashController> {
           // Background subtle pattern or light effect
           Positioned.fill(
             child: Opacity(
-              opacity: 0.05,
-              child: CustomPaint(painter: GridPainter()),
+              opacity: isDark ? 0.05 : 0.02,
+              child: CustomPaint(painter: GridPainter(isDark: isDark)),
             ),
           ),
 
@@ -130,10 +137,10 @@ class SplashView extends GetView<SplashController> {
       builder: (context, value, child) {
         return Opacity(opacity: value.clamp(0.0, 1.0), child: child);
       },
-      child: const Text(
+      child: Text(
         "LUXURY IN EVERY DETAIL",
         style: TextStyle(
-          color: Colors.white60,
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           fontSize: 10,
           letterSpacing: 2.5,
           fontWeight: FontWeight.w400,
@@ -153,7 +160,9 @@ class SplashView extends GetView<SplashController> {
               height: 2,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white10,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: FractionallySizedBox(
@@ -195,10 +204,13 @@ class SlidingGradientTransform extends GradientTransform {
 }
 
 class GridPainter extends CustomPainter {
+  final bool isDark;
+  GridPainter({required this.isDark});
+
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.white
+      ..color = isDark ? Colors.white : Colors.black
       ..strokeWidth = 1.0;
 
     for (var i = 0.0; i <= size.width; i += 40) {

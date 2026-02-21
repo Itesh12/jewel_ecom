@@ -15,6 +15,7 @@ class StorageService extends GetxService {
   static const String _keyUserId = 'user_id';
   static const String _keyUserName = 'user_name';
   static const String _keyUserEmail = 'user_email';
+  static const String _keyIsDarkMode = 'is_dark_mode';
 
   // Token Management
   Future<void> setToken(String token) async =>
@@ -35,6 +36,15 @@ class StorageService extends GetxService {
     await _prefs.setString(_keyUserName, name);
     await _prefs.setString(_keyUserEmail, email);
   }
+
+  String? getUserName() => _prefs.getString(_keyUserName);
+  String? getUserEmail() => _prefs.getString(_keyUserEmail);
+
+  // Theme
+  Future<void> setIsDarkMode(bool isDark) async =>
+      await _prefs.setBool(_keyIsDarkMode, isDark);
+  bool getIsDarkMode() =>
+      _prefs.getBool(_keyIsDarkMode) ?? true; // Default to dark for luxury
 
   void clearAuth() {
     _prefs.remove(_keyToken);

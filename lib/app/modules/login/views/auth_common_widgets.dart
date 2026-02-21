@@ -7,22 +7,31 @@ class AuthBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
-        Container(color: AppColors.backgroundDark),
-        const Positioned(
+        Container(
+          color: isDark
+              ? AppColors.backgroundDark
+              : Theme.of(context).scaffoldBackgroundColor,
+        ),
+        Positioned(
           top: -100,
           left: -100,
           child: AuthGlow(
-            color: Color(0x14D4AF37), // AppColors.primary with 0.08 opacity
+            color: isDark
+                ? const Color(0x14D4AF37)
+                : AppColors.primary.withValues(alpha: 0.1),
             size: 400,
           ),
         ),
-        const Positioned(
+        Positioned(
           bottom: -150,
           right: -50,
           child: AuthGlow(
-            color: Color(0x1FD4AF37), // AppColors.primary with 0.12 opacity
+            color: isDark
+                ? const Color(0x1FD4AF37)
+                : AppColors.primary.withValues(alpha: 0.15),
             size: 500,
           ),
         ),
@@ -87,11 +96,14 @@ class AuthTabSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 56,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFF121212), // Deep black background
+        color: isDark
+            ? const Color(0xFF121212)
+            : AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(28),
       ),
       child: Row(
@@ -129,21 +141,36 @@ class _TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF1F1F1F) : Colors.transparent,
+          color: isActive
+              ? (isDark ? const Color(0xFF1F1F1F) : Colors.white)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
+          boxShadow: isActive && !isDark
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                  ),
+                ]
+              : [],
         ),
         alignment: Alignment.center,
         child: Text(
           text,
           style: TextStyle(
-            color: isActive ? AppColors.primary : Colors.white38,
-            fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+            color: isActive
+                ? AppColors.primary
+                : (isDark
+                      ? Colors.white38
+                      : AppColors.textPrimary.withValues(alpha: 0.7)),
+            fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
             fontSize: 16,
             letterSpacing: 0.5,
           ),
@@ -186,9 +213,9 @@ class AuthHeader extends StatelessWidget {
               child: GestureDetector(
                 onTap: onBack,
                 behavior: HitTestBehavior.opaque,
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onSurface,
                   size: 24,
                 ),
               ),
@@ -200,12 +227,13 @@ class AuthHeader extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 32,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 34,
                 height: 1.1,
-                fontWeight: FontWeight.w500,
-                letterSpacing: -0.8,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -1.0,
+                fontFamily: 'serif', // Fallback to serif for luxury look
               ),
             ),
           ),
@@ -217,10 +245,11 @@ class AuthHeader extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.4),
+                color: Theme.of(context).colorScheme.onSurface, // Full opacity
                 fontSize: 14,
-                fontWeight: FontWeight.w400,
-                height: 1.4,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+                letterSpacing: 0.2,
               ),
             ),
           ),
